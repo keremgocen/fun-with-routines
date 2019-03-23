@@ -1,3 +1,13 @@
+# fun-with-routines
+
+How to run locally
+-----
+
+```
+docker build -t fwr .
+docker run --name test --rm fwr
+```
+
 # challenge.golang
 Golang Studio / Go Challenge new Candidates
 
