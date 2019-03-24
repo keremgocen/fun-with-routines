@@ -8,6 +8,13 @@ docker build -t fwr .
 docker run --name test --rm fwr
 ```
 
+Run tests
+(after building the image)
+
+```
+docker run -it fwr go test github.com/keremgocen/fun-with-routines
+```
+
 # challenge.golang
 Golang Studio / Go Challenge new Candidates
 

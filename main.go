@@ -1,9 +1,11 @@
 package main
 
+import (
+	"log"
+)
+
 func main() {
-
-	problem1()
-
-	problem2()
-
+	log.Printf("random numbers printed: %d", problem1())
+	// problem2()
 }
+
