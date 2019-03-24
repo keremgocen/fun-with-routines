@@ -7,52 +7,64 @@ import (
 	"time"
 )
 
-func problem2() {
+type task struct {
+	id int
+	slot int
+	loop int
+	num float32
+}
+
+func problem2(taskCount int) []time.Time {
 
 	log.Printf("problem2: started --------------------------------------------")
 
-	jobs := make(chan int, 5)
-	numbers := make(chan float32, 5)
-	for j := 1; j <= 5; j++ {
+	jobs := make(chan int, taskCount)
+	tasks := make(chan task, taskCount)
+	for j := 1; j <= taskCount; j++ {
 		jobs <- j
 	}
 	close(jobs)
 
 	var wg sync.WaitGroup
-	wg.Add(5)
+	wg.Add(taskCount)
 
 	for inx := 0; inx < 10; inx++ {
 
-		go printRandom2(inx, &wg, jobs, numbers)
+		go printRandom2(inx, &wg, jobs, tasks)
 
 	}
 
 	wg.Wait()
-	close(numbers)
+	close(tasks)
 
 	limiter := time.Tick(1 * time.Second)
 
-	nums := make([]float32, 0)
-	for n := range numbers {
+	ts := make([]time.Time, 0)
+	for t := range tasks {
 		<-limiter
-		nums = append(nums, n)
-		log.Printf("problem2: %f", n)
-		// log.Printf("problem2: job=%d slot=%03d count=%05d rand=%f", j, slot, inx, r)
+		ts = append(ts, time.Now().UTC())
+		log.Printf("ts:%v", time.Now().UTC())
+		log.Printf("problem2: job=%d slot=%03d count=%05d rand=%f", t.id, t.slot, t.loop, t.num)
 	}
 
 	log.Printf("problem2: finished -------------------------------------------")
+	return ts
 }
 
-func printRandom2(slot int, wg *sync.WaitGroup, jobs <-chan int, nums chan<- float32) {
+func printRandom2(slot int, wg *sync.WaitGroup, jobs <-chan int, tasks chan<- task) {
 
 	for inx := 0; inx < 10; inx++ {
 
 		select {
-		case _, ok := <-jobs:
+		case j, ok := <-jobs:
 			if ok {
-				r := rand.Float32()
-				// log.Printf("problem2: job=%d slot=%03d count=%05d rand=%f", j, slot, inx, r)
-				nums <- r
+				t := task{
+					id: j,
+					slot: slot,
+					loop: inx,
+					num: rand.Float32(),
+				}
+				tasks <- t
 				wg.Done()
 			} else {
 				return
