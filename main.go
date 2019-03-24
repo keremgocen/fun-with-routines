@@ -5,7 +5,7 @@ import (
 )
 
 func main() {
-	log.Printf("random numbers printed: %d", problem1())
+	log.Printf("random numbers printed: %d", problem1(100))
 	ts := problem2(5)
 	log.Println("timestamps for problem2:")
 	for _, v := range ts {

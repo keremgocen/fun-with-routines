@@ -6,16 +6,18 @@ import (
 	"sync"
 )
 
-func problem1() int {
+// problem1 prints as many as taskCount random float32 values
+// returns number of values printed, merging results from all go routines generated
+func problem1(taskCount int) int {
 
 	log.Printf("problem1: started --------------------------------------------")
 
 	// jobs channel is used for communicating between
-	// go routines to make sure 100 jobs in total will be
+	// go routines to make sure as many as `taskCount` jobs in total will be
 	// processed despite the number of loops or go routines
-	jobs := make(chan int, 100)
-	numbers := make(chan float32, 100)
-	for j := 1; j <= 100; j++ {
+	jobs := make(chan int, taskCount)
+	numbers := make(chan float32, taskCount)
+	for j := 1; j <= taskCount; j++ {
 		jobs <- j
 	}
 
@@ -25,8 +27,8 @@ func problem1() int {
 	// a wait group is used instead of time.Sleep()
 	var wg sync.WaitGroup
 
-	// wait group will have 100 jobs
-	wg.Add(100)
+	// wait group will have parametized number of jobs
+	wg.Add(taskCount)
 
 	for inx := 0; inx < 10; inx++ {
 		go printRandom1(inx, &wg, jobs, numbers)
@@ -46,6 +48,8 @@ func problem1() int {
 	return len(nums)
 }
 
+// printRandom1 reads jobs channel to decide if it should print a random value
+// writes the printed value into the num channel for communication with the main process. 
 func printRandom1(slot int, wg *sync.WaitGroup, jobs <-chan int, nums chan<- float32) {
 
 	//
