@@ -1,9 +1,7 @@
 package main
 
 import (
-	"reflect"
 	"testing"
-	"time"
 )
 
 func Test_problem2(t *testing.T) {
@@ -13,14 +11,29 @@ func Test_problem2(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want []time.Time
+		low  float64
+		high float64
 	}{
-		// TODO: Add test cases.
+		{
+			"difference between timestamps are between 0.9 and 1.1 seconds",
+			args{
+				taskCount: 5,
+			},
+			0.9,
+			1.1,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := problem2(tt.args.taskCount); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("problem2() = %v, want %v", got, tt.want)
+			ts := problem2(tt.args.taskCount)
+			for i, v := range ts {
+				if i+1 < tt.args.taskCount {
+					delta := ts[i+1].Sub(v)
+					got := delta.Seconds()
+					if got < tt.low || got > tt.high {
+						t.Errorf("problem2(%d) got:%v should be between %v < x < %v", i, got, tt.low, tt.high)
+					}
+				}
 			}
 		})
 	}

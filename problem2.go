@@ -43,7 +43,6 @@ func problem2(taskCount int) []time.Time {
 	for t := range tasks {
 		<-limiter
 		ts = append(ts, time.Now().UTC())
-		log.Printf("ts:%v", time.Now().UTC())
 		log.Printf("problem2: job=%d slot=%03d count=%05d rand=%f", t.id, t.slot, t.loop, t.num)
 	}
 
