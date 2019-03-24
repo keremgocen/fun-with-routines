@@ -22,4 +22,5 @@ jobs:
       - checkout
 
       # specify any bash command here prefixed with `run: `
+      - run: go get github.com//keremgocen/fun-with-routines
       - run: go test -v github.com/keremgocen/fun-with-routines
