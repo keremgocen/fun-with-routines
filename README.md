@@ -41,4 +41,4 @@ type task struct {
 ``` 
 Same as in problem1, jobs channels for go routines are populated with task ids and the tasks channel is passed in to fan-in results in the main process. 
 
-For testing `problem2()`, a `time.Tick` channel is used to limit the rate main process is reading the results from tasks channel. One result is read every second and the timestamp is recorded. Then in `problem2_test.go` timestamps are compared against consecutive tasks and the difference is expected to be between 0.9 and 1.1 seconds.  
+For testing `problem2()`, a `time.Tick` channel is used to limit the rate main process is reading the results from tasks channel. One result is read every second and the timestamp is recorded. Then in `problem2_test.go` timestamps are compared for consecutive tasks and the difference is expected to be between 0.9 and 1.1 seconds.  
